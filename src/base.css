@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@layer components {
+	.btn-nav{
+		@apply text-gray-800 hover:text-cyan-900 hover:border-blue-600 text-center p-2 border md:border-none md:bg-transparent md:hover:bg-transparent hover:font-semibold rounded-lg bg-yellow-300 hover:bg-yellow-200
+	}
+}
