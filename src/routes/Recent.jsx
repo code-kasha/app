@@ -5,60 +5,52 @@ import axios from "axios"
 import Heading from "../components/page/Heading"
 import Navigation from "../components/page/Navigation"
 import Grid from "../components/page/Grid"
+import { useSearchParams } from 'react-router-dom'
 
 export default function RecentAnime() {
-	const [data, setData] = useState({})
-	const [page, setPage] = useState(() => {
-		return parseInt(localStorage.getItem("recentPage"))
-	})
+	const [searchParams, setSearchParams] = useSearchParams()
+	const page  = parseInt(searchParams.get('page') ?? 1)
+	const [data, setData] = useState([])
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		const recentData = JSON.parse(localStorage.getItem("recentData")) || {}
-		const currentPage = parseInt(recentData.currentPage) || 0
-
-		const fetchData = async () => {
-			if (recentData && page === currentPage) {
-				setData(recentData)
-				setPage(currentPage)
-			} else {
-				const url = `http://localhost:3000/anime/top-airing?page=${page}`
-				const response = await axios.get(url)
-				const data = response.data
-				const newPage = parseInt(data.currentPage) || 0
-				if (newPage > 0) {
-					setData(data)
-					setPage(newPage)
-					localStorage.setItem("recentData", JSON.stringify(data))
-					localStorage.setItem("recentPage", newPage)
-				}
+		let ignore = false
+		const url = `https://jsonplaceholder.typicode.com/photos?_start=${page * 5}&_limit=5`
+		setLoading(true)
+		axios.get(url).then((response) => {
+			if(!ignore) {
+				setLoading(false)
+				setData(response.data)
 			}
+		})
+		return () => {
+			ignore = true
 		}
-		fetchData()
 	}, [page])
 
 	function handlePrevious() {
 		if (page > 1) {
-			const newPage = page - 1
-			setPage(newPage)
-			localStorage.setItem("recentPage", newPage)
+			searchParams.set('page', page - 1)
+			setSearchParams(searchParams)
 		}
 	}
 
 	function handleNext() {
-		if (data.hasNextPage) {
-			const newPage = parseInt(page) + 1
-			setPage(newPage)
-			localStorage.setItem("recentPage", newPage)
-		}
+		searchParams.set('page', page + 1)
+		setSearchParams(searchParams)
 	}
 
 	return (
 		<>
 			<Heading title={"Recent Anime"} />
 
+			{loading && <div>Is Loading...</div>}
+
+			{data.map((item) => <div key={item.id}>{item.title}</div>)}
+
 			<Navigation
 				page={page}
-				hasNext={data.hasNextPage || false}
+				hasNext={true}
 				prev={handlePrevious}
 				next={handleNext}
 			/>

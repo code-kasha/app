@@ -14,31 +14,27 @@ import Search from "./routes/Search"
 import Top from "./routes/Top"
 import Watch from "./routes/Watch"
 
-import { AnimeProvider } from "./providers/anime"
-
 function App() {
 	return (
 		<>
-			<AnimeProvider>
-				<div className="flex flex-col h-screen justify-between">
-					<Navbar />
-					<div className="flex-1">
-						<Routes>
-							<Route index element={<Index />} />
-							<Route path="/details/:id/" element={<Details />} />
-							<Route path="/genre/:genre" element={<Genre />} />
-							<Route path="/genres" element={<Genres />} />
-							<Route path="/movies" element={<Movies />} />
-							<Route path="/popular" element={<Popular />} />
-							<Route path="/recent" element={<Recent />} />
-							<Route path="/search/:query" element={<Search />} />
-							<Route path="/top" element={<Top />} />
-							<Route path="/watch/:id" element={<Watch />} />
-						</Routes>
-					</div>
-					<Footer />
+			<div className="flex flex-col h-screen justify-between">
+				<Navbar />
+				<div className="flex-1">
+					<Routes>
+						<Route index element={<Index />} />
+						<Route path="/details/:id/" element={<Details />} />
+						<Route path="/genre/:genre" element={<Genre />} />
+						<Route path="/genres" element={<Genres />} />
+						<Route path="/movies" element={<Movies />} />
+						<Route path="/popular" element={<Popular />} />
+						<Route path="/recent" element={<Recent />} />
+						<Route path="/search/:query" element={<Search />} />
+						<Route path="/top" element={<Top />} />
+						<Route path="/watch/:id" element={<Watch />} />
+					</Routes>
 				</div>
-			</AnimeProvider>
+				<Footer />
+			</div>
 		</>
 	)
 }
